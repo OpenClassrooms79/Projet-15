@@ -1,4 +1,12 @@
+*.lnk
+*.odt
+*.pdf
+*.txt
+*.url
+*.zip
+desktop.ini
 /.idea
+/backup
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -18,3 +26,7 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
