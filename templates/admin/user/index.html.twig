@@ -1,0 +1,63 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Invités{% endblock %}
+
+{% block admin %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Invités</h1>
+        <a href="{{ path('admin_user_add') }}" class="btn btn-primary">Ajouter</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Compte actif ?</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td><a href="#" class="toggle-status text-decoration-none"
+                       data-id="{{ user.id }}">{{ user.enabled ? '✔️' : '❌' }}</a></td>
+                <td>
+                    <a href="{{ path('admin_user_delete', {id: user.id}) }}" class="btn btn-danger"
+                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="text-center">Aucun utilisateur trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="" class="btn btn-primary">Ajouter un utilisateur</a>
+    <script>
+        document.querySelectorAll('.toggle-status').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const userId = this.dataset.id;
+
+                fetch(`/admin/user/${userId}/toggle`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.textContent = data.enabled ? '✔️' : '❌';
+                        }
+                    });
+            });
+        });
+    </script>
+{% endblock %}

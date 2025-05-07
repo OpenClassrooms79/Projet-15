@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -35,7 +36,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $medias;
 
     #[Column(length: 60)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\NotCompromisedPassword()]
+    #[Assert\Length(min: 8)]
     private string $password;
+
+    #[ORM\Column]
+    private bool $enabled = true;
 
     public function __construct()
     {
@@ -130,6 +138,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): User
     {
         $this->password = $password;
+        return $this;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): static
+    {
+        $this->enabled = $enabled;
+
         return $this;
     }
 }
