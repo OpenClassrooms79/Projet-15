@@ -12,10 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class UserController extends AbstractController
 {
     #[Route('/admin/user', name: 'admin_user_index')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository): Response
     {
         // Récupérer tous les utilisateurs
@@ -27,6 +29,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/admin/user/add', name: 'admin_user_add')]
+    #[IsGranted('ROLE_ADMIN')]
     public function add(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
@@ -49,6 +52,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/admin/user/delete/{id}', name: 'admin_user_delete')]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteUser(int $id, EntityManagerInterface $em): Response
     {
         $user = $em->getRepository(User::class)->find($id);
@@ -65,6 +69,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/admin/user/{id}/toggle', name: 'admin_user_toggle', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function toggleStatus(User $user, EntityManagerInterface $em): JsonResponse
     {
         $user->setEnabled(!$user->isEnabled());

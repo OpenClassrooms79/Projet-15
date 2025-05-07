@@ -2,13 +2,17 @@
 
 namespace App\Controller\Admin;
 
+use App\Constant\Pagination;
 use App\Entity\Media;
 use App\Form\MediaType;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use function unlink;
 
 class MediaController extends AbstractController
 {
@@ -28,15 +32,16 @@ class MediaController extends AbstractController
         $medias = $this->registry->getRepository(Media::class)->findBy(
             $criteria,
             ['id' => 'ASC'],
-            25,
-            25 * ($page - 1),
+            Pagination::IMAGES_PER_PAGE,
+            Pagination::IMAGES_PER_PAGE * ($page - 1),
         );
-        $total = $this->registry->getRepository(Media::class)->count();
+        $total = $this->registry->getRepository(Media::class)->count($criteria);
 
         return $this->render('admin/media/index.html.twig', [
             'medias' => $medias,
             'total' => $total,
             'page' => $page,
+            'images_per_page' => Pagination::IMAGES_PER_PAGE,
         ]);
     }
 
@@ -63,12 +68,20 @@ class MediaController extends AbstractController
     }
 
     #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
-    public function delete(int $id): Response
+    public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
-        $media = $this->registry->getRepository(Media::class)->find($id);
-        $this->registry->getManager()->remove($media);
-        $this->registry->getManager()->flush();
-        unlink($media->getPath());
+        $criteria = ['id' => $id];
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $criteria['user'] = $this->getUser();
+        }
+
+        $media = $this->registry->getRepository(Media::class)->findOneBy($criteria);
+        if ($media !== null) {
+            $entityManager->remove($media);
+            $entityManager->flush();
+            unlink($media->getPath());
+        }
 
         return $this->redirectToRoute('admin_media_index');
     }
