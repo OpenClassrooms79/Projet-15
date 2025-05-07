@@ -23,7 +23,7 @@ class HomeController extends AbstractController
     #[Route("/guests", name: "guests")]
     public function guests(): Response
     {
-        $guests = $this->registry->getRepository(User::class)->findBy(['admin' => false]);
+        $guests = $this->registry->getRepository(User::class)->findBy(['admin' => false, 'enabled' => true]);
         return $this->render('front/guests.html.twig', [
             'guests' => $guests,
         ]);
@@ -32,7 +32,11 @@ class HomeController extends AbstractController
     #[Route("/guest/{id}", name: "guest")]
     public function guest(int $id): Response
     {
-        $guest = $this->registry->getRepository(User::class)->find($id);
+        $guest = $this->registry->getRepository(User::class)->findOneBy(['id' => $id, 'enabled' => true]);
+        if ($guest === null) {
+            return $this->redirectToRoute('home');
+        }
+
         return $this->render('front/guest.html.twig', [
             'guest' => $guest,
         ]);
