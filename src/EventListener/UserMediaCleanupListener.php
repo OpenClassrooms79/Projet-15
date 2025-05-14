@@ -7,6 +7,8 @@ use App\Entity\Media;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Symfony\Component\Filesystem\Filesystem;
 
+use function is_file;
+
 class UserMediaCleanupListener
 {
     public function preRemove(User $user, PreRemoveEventArgs $args): void
@@ -18,7 +20,7 @@ class UserMediaCleanupListener
 
         foreach ($medias as $media) {
             $path = $media->getPath();
-            if ($filesystem->exists($path)) {
+            if ($filesystem->exists($path) && is_file($path)) {
                 $filesystem->remove($path);
             }
         }
