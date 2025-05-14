@@ -55,7 +55,7 @@ class AppFixtures extends Fixture
 
         AlbumFactory::createMany(10, static function (int $i) {
             return [
-                'name' => 'Test album',
+                'name' => 'Test album ' . $i,
             ];
         });
 

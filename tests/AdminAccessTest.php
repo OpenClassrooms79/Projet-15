@@ -22,7 +22,7 @@ class AdminAccessTest extends WebTestCase
         $this->client = static::createClient();
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $this->album = $entityManager->getRepository(Album::class)->findOneBy(['name' => 'Test album']);
+        $this->album = $entityManager->getRepository(Album::class)->findOneBy(['name' => 'Test album 1']);
         $this->user = $entityManager->getRepository(User::class)->findOneBy(['email' => 'user-disabled4@example.com']);
     }
 
