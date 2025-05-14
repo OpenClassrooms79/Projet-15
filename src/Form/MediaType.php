@@ -24,8 +24,6 @@ class MediaType extends AbstractType
                 'constraints' => [
                     new Image([
                         'maxSize' => '2M',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-                        'mimeTypesMessage' => 'Le fichier doit être une image valide.',
                         'detectCorrupted' => true,
                         'corruptedMessage' => 'Le fichier est corrompu.',
                     ]),
