@@ -6,23 +6,19 @@
 
 namespace App\Tests;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class LoginTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private EntityManagerInterface $entityManager;
     private UserRepository $userRepository;
 
     public function setUp(): void
     {
         $this->client = static::createClient();
-        $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
-        $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->userRepository = self::getContainer()->get(UserRepository::class);
     }
 
     public function testLoginSuccess(): void

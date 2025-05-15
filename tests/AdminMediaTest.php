@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Entity\Album;
 use App\Entity\Media;
 use App\Entity\User;
 use App\Repository\AlbumRepository;
@@ -41,9 +40,9 @@ class AdminMediaTest extends WebTestCase
         $this->upload_dir = $this->project_dir . '/public/uploads';
         $this->filesystem = new Filesystem();
 
-        $this->albumRepository = $this->entityManager->getRepository(Album::class);
-        $this->mediaRepository = $this->entityManager->getRepository(Media::class);
-        $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->albumRepository = self::getContainer()->get(AlbumRepository::class);
+        $this->mediaRepository = self::getContainer()->get(MediaRepository::class);
+        $this->userRepository = self::getContainer()->get(UserRepository::class);
         $this->admin = $this->userRepository->findOneBy(['email' => 'admin-enabled2@example.com']);
 
         $this->client->loginUser($this->admin);
@@ -82,9 +81,10 @@ class AdminMediaTest extends WebTestCase
 
         // récupérer et remplir le formulaire
         $form = $crawler->selectButton('Ajouter')->form();
-        $form['media[user]'] = $user->getId();
-        $form['media[album]'] = $album->getId();
+        $form['media[user]'] = (string) $user->getId();
+        $form['media[album]'] = (string) $album->getId();
         $form['media[title]'] = 'Test ajout media';
+        /** @phpstan-ignore-next-line */
         $form['media[file]'] = $uploadedFile;
 
         // Soumettre le formulaire

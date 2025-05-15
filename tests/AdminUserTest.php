@@ -26,7 +26,7 @@ class AdminUserTest extends WebTestCase
         $this->client = static::createClient();
         $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->userRepository = self::getContainer()->get(UserRepository::class);
         $this->admin = $this->userRepository->findOneBy(['email' => 'admin-enabled2@example.com']);
 
         $this->client->loginUser($this->admin);

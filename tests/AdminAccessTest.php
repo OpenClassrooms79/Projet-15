@@ -34,9 +34,9 @@ class AdminAccessTest extends WebTestCase
         $this->client = static::createClient();
         $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $this->albumRepository = $this->entityManager->getRepository(Album::class);
-        $this->mediaRepository = $this->entityManager->getRepository(Media::class);
-        $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->albumRepository = self::getContainer()->get(AlbumRepository::class);
+        $this->mediaRepository = self::getContainer()->get(MediaRepository::class);
+        $this->userRepository = self::getContainer()->get(UserRepository::class);
         $this->album = $this->albumRepository->findOneBy(['name' => 'Test album 1']);
         $this->media = $this->mediaRepository->findOneBy([]); // récupérer un enregistrement quelconque
         $this->user = $this->userRepository->findOneBy(['email' => 'user-enabled4@example.com']);
