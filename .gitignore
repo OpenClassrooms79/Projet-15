@@ -1,5 +1,8 @@
 *.lnk
+*.ods
 *.odt
+*.ods#
+*.odt#
 *.pdf
 *.txt
 *.url
