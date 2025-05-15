@@ -33,7 +33,7 @@ final class UserFactory extends PersistentProxyObjectFactory
      *
      * @todo add your default values here
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
             'admin' => self::faker()->boolean(),

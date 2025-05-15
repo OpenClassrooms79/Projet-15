@@ -4,7 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Album;
 use App\Form\AlbumType;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\AlbumRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,13 +14,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AlbumController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $registry) {}
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private AlbumRepository $albumRepository,
+    ) {}
 
     #[Route("/admin/album", name: "admin_album_index")]
     #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
-        $albums = $this->registry->getRepository(Album::class)->findAll();
+        $albums = $this->albumRepository->findAll();
 
         return $this->render('admin/album/index.html.twig', ['albums' => $albums]);
     }
@@ -33,8 +37,8 @@ class AlbumController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->registry->getManager()->persist($album);
-            $this->registry->getManager()->flush();
+            $this->entityManager->persist($album);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('admin_album_index');
         }
@@ -46,12 +50,12 @@ class AlbumController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function update(Request $request, int $id): Response
     {
-        $album = $this->registry->getRepository(Album::class)->find($id);
+        $album = $this->albumRepository->find($id);
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->registry->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('admin_album_index');
         }
@@ -63,9 +67,9 @@ class AlbumController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id): Response
     {
-        $media = $this->registry->getRepository(Album::class)->find($id);
-        $this->registry->getManager()->remove($media);
-        $this->registry->getManager()->flush();
+        $media = $this->albumRepository->find($id);
+        $this->entityManager->remove($media);
+        $this->entityManager->flush();
 
         return $this->redirectToRoute('admin_album_index');
     }

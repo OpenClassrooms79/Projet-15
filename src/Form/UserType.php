@@ -47,7 +47,7 @@ class UserType extends AbstractType
         ]);
     }
 
-    public function validatePassword($password, ExecutionContextInterface $context): void
+    public function validatePassword(string $password, ExecutionContextInterface $context): void
     {
         $user = $context->getRoot()->getData(); // récupère l'objet User
 

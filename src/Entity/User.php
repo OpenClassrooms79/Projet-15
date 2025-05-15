@@ -26,6 +26,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $name = null;
 
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 

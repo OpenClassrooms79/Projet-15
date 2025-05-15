@@ -16,9 +16,8 @@ final class MediaFactory extends PersistentProxyObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct(
-        private UserRepository $userRepository,
-    ) {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -32,7 +31,7 @@ final class MediaFactory extends PersistentProxyObjectFactory
      *
      * @todo add your default values here
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
             'path' => self::faker()->text(),

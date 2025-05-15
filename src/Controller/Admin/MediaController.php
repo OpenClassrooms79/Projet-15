@@ -5,9 +5,10 @@ namespace App\Controller\Admin;
 use App\Constant\Pagination;
 use App\Entity\Media;
 use App\Form\MediaType;
+use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +17,10 @@ use function unlink;
 
 class MediaController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $registry) {}
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private MediaRepository $mediaRepository,
+    ) {}
 
     #[Route("/admin/media", name: "admin_media_index")]
     public function index(Request $request): Response
@@ -29,13 +33,13 @@ class MediaController extends AbstractController
             $criteria['user'] = $this->getUser();
         }
 
-        $medias = $this->registry->getRepository(Media::class)->findBy(
+        $medias = $this->mediaRepository->findBy(
             $criteria,
             ['id' => 'ASC'],
             Pagination::IMAGES_PER_PAGE,
             Pagination::IMAGES_PER_PAGE * ($page - 1),
         );
-        $total = $this->registry->getRepository(Media::class)->count($criteria);
+        $total = $this->mediaRepository->count($criteria);
 
         return $this->render('admin/media/index.html.twig', [
             'medias' => $medias,
@@ -59,8 +63,8 @@ class MediaController extends AbstractController
             $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads';
             $media->setPath('uploads/' . md5(uniqid('', true)) . '.' . $media->getFile()->guessExtension());
             $media->getFile()->move($uploadDir, $media->getPath());
-            $this->registry->getManager()->persist($media);
-            $this->registry->getManager()->flush();
+            $this->entityManager->persist($media);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('admin_media_index');
         }
@@ -69,7 +73,7 @@ class MediaController extends AbstractController
     }
 
     #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
-    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    public function delete(int $id, EntityManagerInterface $entityManager, Filesystem $filesystem): Response
     {
         $criteria = ['id' => $id];
 
@@ -77,12 +81,12 @@ class MediaController extends AbstractController
             $criteria['user'] = $this->getUser();
         }
 
-        $media = $this->registry->getRepository(Media::class)->findOneBy($criteria);
+        $media = $this->mediaRepository->findOneBy($criteria);
         if ($media !== null) {
             $entityManager->remove($media);
             $entityManager->flush();
-            if (file_exists($media->getPath())) {
-                unlink($media->getPath());
+            if ($filesystem->exists($media->getPath())) {
+                $filesystem->remove($media->getPath());
             }
         }
 

@@ -93,7 +93,9 @@
     }
   },
   "require-dev": {
+    "ext-gd": "*",
     "doctrine/doctrine-fixtures-bundle": "^4.1",
+    "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^9.5",
     "rector/rector": "^2.0",
     "roave/security-advisories": "dev-latest",
@@ -104,7 +106,6 @@
     "symfony/phpunit-bridge": "^7.1",
     "symfony/stopwatch": "7.2.*",
     "symfony/web-profiler-bundle": "7.2.*",
-    "zenstruck/foundry": "^2.5",
-    "ext-gd": "*"
+    "zenstruck/foundry": "^2.5"
   }
 }

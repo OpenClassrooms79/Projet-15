@@ -27,6 +27,11 @@ class Media
     #[ORM\Column]
     private string $title;
 
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
     private ?UploadedFile $file = null;
 
     public function getId(): ?int
