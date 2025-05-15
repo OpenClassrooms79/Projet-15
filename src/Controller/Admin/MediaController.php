@@ -58,7 +58,9 @@ class MediaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$this->isGranted('ROLE_ADMIN')) {
-                $media->setUser($this->getUser());
+                /** @var \App\Entity\User|null $user */
+                $user = $this->getUser();
+                $media->setUser($user);
             }
             $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads';
             $media->setPath('uploads/' . md5(uniqid('', true)) . '.' . $media->getFile()->guessExtension());

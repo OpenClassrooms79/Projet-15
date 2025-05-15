@@ -27,7 +27,9 @@ class UserCheckerTest extends TestCase
 
         $checker = new UserChecker();
 
-        $checker->checkPreAuth($user); // pas d'exception => test OK
-        $this->assertTrue(true);
+        $checker->checkPreAuth($user);
+
+        // Pas d'exception levée = test réussi
+        $this->addToAssertionCount(1);
     }
 }
