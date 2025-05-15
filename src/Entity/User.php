@@ -37,13 +37,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    /**
+     * @var Collection<int, Media>
+     */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user')]
     private Collection $medias;
 
     #[Column(length: 60)]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\NotCompromisedPassword()]
+    #[Assert\NotCompromisedPassword]
     #[Assert\Length(min: 8)]
     private string $password;
 
@@ -92,11 +95,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->description = $description;
     }
 
+    /**
+     * @return  Collection<int, Media>
+     */
     public function getMedias(): Collection
     {
         return $this->medias;
     }
 
+    /**
+     * @param Collection<int, Media> $medias
+     * @return void
+     */
     public function setMedias(Collection $medias): void
     {
         $this->medias = $medias;

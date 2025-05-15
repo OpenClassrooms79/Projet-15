@@ -17,6 +17,8 @@ class UserMediaCleanupListenerTest extends KernelTestCase
     private EntityManagerInterface $entityManager;
     private Filesystem $filesystem;
     private string $uploadDir;
+
+    /** @var string[] $filePaths */
     private array $filePaths = [];
 
     protected function setUp(): void
