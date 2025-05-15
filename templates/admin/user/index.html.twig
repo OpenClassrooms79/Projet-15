@@ -8,6 +8,14 @@
         <a href="{{ path('admin_user_add') }}" class="btn btn-primary">Ajouter</a>
     </div>
 
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
     <table class="table">
         <thead>
         <tr>
@@ -37,7 +45,7 @@
         </tbody>
     </table>
 
-    <a href="" class="btn btn-primary">Ajouter un utilisateur</a>
+    <a href="{{ path('admin_user_add') }}" class="btn btn-primary">Ajouter un utilisateur</a>
     <script>
         document.querySelectorAll('.toggle-status').forEach(link => {
             link.addEventListener('click', function (e) {

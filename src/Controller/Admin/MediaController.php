@@ -56,8 +56,9 @@ class MediaController extends AbstractController
             if (!$this->isGranted('ROLE_ADMIN')) {
                 $media->setUser($this->getUser());
             }
+            $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads';
             $media->setPath('uploads/' . md5(uniqid('', true)) . '.' . $media->getFile()->guessExtension());
-            $media->getFile()->move('uploads/', $media->getPath());
+            $media->getFile()->move($uploadDir, $media->getPath());
             $this->registry->getManager()->persist($media);
             $this->registry->getManager()->flush();
 
@@ -80,7 +81,9 @@ class MediaController extends AbstractController
         if ($media !== null) {
             $entityManager->remove($media);
             $entityManager->flush();
-            unlink($media->getPath());
+            if (file_exists($media->getPath())) {
+                unlink($media->getPath());
+            }
         }
 
         return $this->redirectToRoute('admin_media_index');
