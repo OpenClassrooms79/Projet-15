@@ -24,9 +24,15 @@ class AdminUserTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $this->userRepository = self::getContainer()->get(UserRepository::class);
+        /** @var EntityManagerInterface $em */
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $this->entityManager = $em;
+
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        $this->userRepository = $userRepository;
+
         $this->admin = $this->userRepository->findOneBy(['email' => 'admin-enabled2@example.com']);
 
         $this->client->loginUser($this->admin);
@@ -114,10 +120,9 @@ class AdminUserTest extends WebTestCase
         $user->setAdmin(false);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        echo "Nouvel utilisateur créé: " . $user->getId() . "\n";
 
+        // suppression de l'utilisateur
         $this->client->loginUser($this->admin);
-        echo "Utilisateur supprimé: " . $user->getId() . "\n";
         $this->client->request('GET', '/admin/user/delete/' . $user->getId());
         self::assertResponseRedirects('/admin/user');
     }

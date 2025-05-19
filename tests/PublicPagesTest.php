@@ -19,6 +19,8 @@ class PublicPagesTest extends WebTestCase
     {
         self::ensureKernelShutdown();
         $this->client = static::createClient();
+
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
         $this->album = $entityManager->getRepository(Album::class)->findOneBy(['name' => 'Test album 2']);

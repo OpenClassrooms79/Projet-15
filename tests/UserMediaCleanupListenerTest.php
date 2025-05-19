@@ -11,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use function file_get_contents;
 use function file_put_contents;
+use function is_string;
 
 class UserMediaCleanupListenerTest extends KernelTestCase
 {
@@ -25,9 +26,17 @@ class UserMediaCleanupListenerTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $this->entityManager = self::getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $this->entityManager = $em;
+
         $this->filesystem = new Filesystem();
-        $this->uploadDir = self::getContainer()->getParameter('kernel.project_dir') . '/public/uploads';
+
+        $projectDir = self::getContainer()->getParameter('kernel.project_dir');
+        if (!is_string($projectDir)) {
+            throw new \UnexpectedValueException('kernel.project_dir doit être une chaîne de caractères');
+        }
+        $this->uploadDir = $projectDir . '/public/' . \App\Constant\Media::UPLOAD_DIR;
         $this->filesystem->mkdir($this->uploadDir); // si le répertoire n'existe pas déjà
     }
 

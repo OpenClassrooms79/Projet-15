@@ -18,7 +18,10 @@ class LoginTest extends WebTestCase
     public function setUp(): void
     {
         $this->client = static::createClient();
-        $this->userRepository = self::getContainer()->get(UserRepository::class);
+
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        $this->userRepository = $userRepository;
     }
 
     public function testLoginSuccess(): void

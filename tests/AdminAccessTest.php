@@ -32,11 +32,23 @@ class AdminAccessTest extends WebTestCase
     {
         self::ensureKernelShutdown();
         $this->client = static::createClient();
-        $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $this->albumRepository = self::getContainer()->get(AlbumRepository::class);
-        $this->mediaRepository = self::getContainer()->get(MediaRepository::class);
-        $this->userRepository = self::getContainer()->get(UserRepository::class);
+        /** @var EntityManagerInterface $em */
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $this->entityManager = $em;
+
+        /** @var AlbumRepository $albumRepository */
+        $albumRepository = self::getContainer()->get(AlbumRepository::class);
+        $this->albumRepository = $albumRepository;
+
+        /** @var MediaRepository $mediaRepository */
+        $mediaRepository = self::getContainer()->get(MediaRepository::class);
+        $this->mediaRepository = $mediaRepository;
+
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        $this->userRepository = $userRepository;
+
         $this->album = $this->albumRepository->findOneBy(['name' => 'Test album 1']);
         $this->media = $this->mediaRepository->findOneBy([]); // récupérer un enregistrement quelconque
         $this->user = $this->userRepository->findOneBy(['email' => 'user-enabled4@example.com']);
@@ -151,10 +163,8 @@ class AdminAccessTest extends WebTestCase
         $this->entityManager->persist($album);
         $this->entityManager->flush();
 
-        echo "Creation de l'album " . $album->getId() . "\n";
-
+        // suppression de l'album
         $this->client->loginUser($this->admin);
-        echo "Suppression de l'album " . $album->getId() . "\n";
         $this->client->request('GET', '/admin/album/delete/' . $album->getId());
         self::assertResponseRedirects();
         self::assertResponseRedirects(expectedLocation: '/admin/album', expectedCode: 302);

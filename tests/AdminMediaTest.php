@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use function imagecreatetruecolor;
 use function imagedestroy;
 use function imagepng;
+use function is_string;
 
 class AdminMediaTest extends WebTestCase
 {
@@ -34,15 +35,31 @@ class AdminMediaTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $this->project_dir = self::getContainer()->getParameter('kernel.project_dir');
-        $this->upload_dir = $this->project_dir . '/public/uploads';
+        /** @var EntityManagerInterface $em */
+        $em = self::getContainer()->get(EntityManagerInterface::class);
+        $this->entityManager = $em;
+
+        $projectDir = self::getContainer()->getParameter('kernel.project_dir');
+        if (!is_string($projectDir)) {
+            throw new \UnexpectedValueException('kernel.project_dir doit être une chaîne de caractères');
+        }
+        $this->project_dir = $projectDir;
+        $this->upload_dir = $this->project_dir . '/public/' . \App\Constant\Media::UPLOAD_DIR;
         $this->filesystem = new Filesystem();
 
-        $this->albumRepository = self::getContainer()->get(AlbumRepository::class);
-        $this->mediaRepository = self::getContainer()->get(MediaRepository::class);
-        $this->userRepository = self::getContainer()->get(UserRepository::class);
+        /** @var AlbumRepository $albumRepository */
+        $albumRepository = self::getContainer()->get(AlbumRepository::class);
+        $this->albumRepository = $albumRepository;
+
+        /** @var MediaRepository $mediaRepository */
+        $mediaRepository = self::getContainer()->get(MediaRepository::class);
+        $this->mediaRepository = $mediaRepository;
+
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        $this->userRepository = $userRepository;
+
         $this->admin = $this->userRepository->findOneBy(['email' => 'admin-enabled2@example.com']);
 
         $this->client->loginUser($this->admin);
@@ -95,7 +112,7 @@ class AdminMediaTest extends WebTestCase
 
         $media = $this->mediaRepository->findOneBy(['title' => 'Test ajout media']);
         self::assertNotNull($media);
-        self::assertFileExists($this->project_dir . '/public/' . $media->getPath());
+        self::assertFileExists($this->project_dir . '/public/' . $media->getWebPath());
 
         // supprimer le fichier temporaire
         if ($this->filesystem->exists($filePath)) {
@@ -114,7 +131,7 @@ class AdminMediaTest extends WebTestCase
 
         // ajouter un media de test
         $filePath = $this->upload_dir . '/test-image.jpg';
-        $dbFilePath = 'uploads/test-image.jpg';
+        $dbFilePath = 'test-image.jpg';
         $this->createTestImage($filePath);
         $media = new Media();
         $media->setUser($user);

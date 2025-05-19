@@ -62,8 +62,14 @@ class MediaController extends AbstractController
                 $user = $this->getUser();
                 $media->setUser($user);
             }
-            $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads';
-            $media->setPath('uploads/' . md5(uniqid('', true)) . '.' . $media->getFile()->guessExtension());
+
+            $projectDir = $this->getParameter('kernel.project_dir');
+            if (!is_string($projectDir)) {
+                throw new \UnexpectedValueException('kernel.project_dir doit être une chaîne de caractères');
+            }
+
+            $uploadDir = $projectDir . '/public/' . \App\Constant\Media::UPLOAD_DIR;
+            $media->setPath(md5(uniqid('', true)) . '.' . $media->getFile()->guessExtension());
             $media->getFile()->move($uploadDir, $media->getPath());
             $this->entityManager->persist($media);
             $this->entityManager->flush();

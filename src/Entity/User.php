@@ -63,7 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -142,7 +142,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->email ?? '';
+        if (empty($this->email)) {
+            throw new \LogicException("L'adresse e-mail de l'utilisateur n'est pas renseignée");
+        }
+        return $this->email;
     }
 
     public function getPassword(): string
