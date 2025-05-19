@@ -12,7 +12,8 @@
                 </div>
                 {% for a in albums %}
                     <div class="col-2">
-                        <a class="btn w-100 py-3 {{ album == a ? 'active' }}" href="{{ path('portfolio', {id: a.id}) }}">
+                        <a class="btn w-100 py-3 {{ album == a ? 'active' }}"
+                           href="{{ path('portfolio', {id: a.id}) }}">
                             {{ a.name }}
                         </a>
                     </div>
@@ -21,7 +22,7 @@
             <div class="row">
                 {% for media in medias %}
                     <div class="col-4 media mb-4">
-                        <img class="w-100" src="{{ asset(media.path) }}" alt="{{ media.title }}">
+                        <img class="w-100" src="{{ asset(media.webPath) }}" alt="{{ media.title }}">
                         <p class="text-center mb-0 mt-2 media-title">{{ media.title }}</p>
                     </div>
                 {% endfor %}

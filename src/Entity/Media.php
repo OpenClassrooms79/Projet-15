@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Constant\Media as MediaConstant;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
@@ -87,5 +88,10 @@ class Media
     public function setAlbum(?Album $album): void
     {
         $this->album = $album;
+    }
+
+    public function getWebPath(): string
+    {
+        return MediaConstant::UPLOAD_DIR . '/' . $this->path;
     }
 }
