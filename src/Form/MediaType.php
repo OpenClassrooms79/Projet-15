@@ -26,6 +26,11 @@ class MediaType extends AbstractType
                         'maxSize' => '2M',
                         'detectCorrupted' => true,
                         'corruptedMessage' => 'Le fichier est corrompu.',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/webp',
+                            'image/png',
+                        ],
                     ]),
                 ],
             ])
