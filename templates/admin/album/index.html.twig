@@ -15,7 +15,7 @@
         <tbody>
         {% for album in albums %}
             <tr>
-                <td>{{ album.name }}</td>
+                <td><a href="{{ path('portfolio', {id: album.id}) }}">{{ album.name }}</a></td>
                 <td>
                     <a href="{{ path('admin_album_update', {id: album.id}) }}" class="btn btn-warning">Modifier</a>
                     <a href="{{ path('admin_album_delete', {id: album.id}) }}" class="btn btn-danger">Supprimer</a>

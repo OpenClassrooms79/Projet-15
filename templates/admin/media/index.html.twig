@@ -20,11 +20,15 @@
         <tbody>
         {% for media in medias %}
             <tr>
-                <td><img src="{{ asset(media.webPath) }}" width="75"/></td>
-                <td>{{ media.title }}</td>
+                <td><a href="{{ asset(media.webPath) }}"><img src="{{ asset(media.webPath) }}" width="75"/></a></td>
+                <td><a href="{{ asset(media.webPath) }}">{{ media.title }}</a></td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>{{ media.user.name }}</td>
-                    <td>{{ media.album.name ?? '' }}</td>
+                    <td>
+                        {% if media.album %}
+                            <a href="{{ path('portfolio', {id: media.album.id}) }}">{{ media.album.name ?? '' }}</a>
+                        {% endif %}
+                    </td>
                 {% endif %}
                 <td>
                     <a href="{{ path('admin_media_delete', {id: media.id}) }}" class="btn btn-danger">Supprimer</a>
