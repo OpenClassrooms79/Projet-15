@@ -3,6 +3,7 @@
 ![Codecov](https://codecov.io/gh/OpenClassrooms79/Projet-15/branch/main/graph/badge.svg)
 ![Symfony](https://img.shields.io/badge/Symfony-black?logo=symfony)
 ![GitHub Issues](https://img.shields.io/github/issues/OpenClassrooms79/Projet-15)
+[![Contribuer](https://img.shields.io/badge/CONTRIBUTING-md-blue)](CONTRIBUTING.md)
 
 # 📸 Ina Zaoui – Site officiel
 
