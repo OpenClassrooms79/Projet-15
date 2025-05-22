@@ -86,11 +86,6 @@ a {
     margin: 0;
 }
 
-.media img {
-    aspect-ratio: 404/524;
-    object-fit: cover;
-}
-
 .media-title {
     font-size: 14px;
     font-family: "DM Sans", sans-serif;

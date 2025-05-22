@@ -22,9 +22,9 @@ administrateur dédié.
 
 ## 📦 Pré-requis
 
-- ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?&logo=php&logoColor=white) PHP ≥ 8.0
-- ![Composer](https://img.shields.io/badge/Composer-885630?logo=composer&logoColor=fff) Composer
-- ![Postgres](https://img.shields.io/badge/Postgres-%23316192.svg?logo=postgresql&logoColor=white) PostgreSQL ≥ 17
+- PHP ≥ 8.0
+- Composer
+- PostgreSQL ≥ 17
 - Extension PHP Xdebug
 - Symfony CLI
 
