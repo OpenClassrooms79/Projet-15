@@ -75,6 +75,11 @@ symfony console doctrine:migrations:migrate -n
 symfony console doctrine:fixtures:load -n --purge-with-truncate --env=test
 ```
 
+### 4️⃣ Copier les images
+
+Télécharger [l'archive de sauvegarde du site](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/876_DA_PHP_Sf_V2/P15/backup.zip)
+et copier les images vers le répertoire `public/uploads` du projet.
+
 ## 🚀 Usage
 
 ### Démarrage du serveur web

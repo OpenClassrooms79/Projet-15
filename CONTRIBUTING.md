@@ -48,13 +48,10 @@ symfony console doctrine:fixtures:load -n --purge-with-truncate --env=test
 
 ### 🧭 Directives
 
-Respecter les [conventions PSR-12](https://www.php-fig.org/psr/psr-12/)
-
-Code sans erreur avec PhpStan (niveau 6 minimum)
-
-Ajouter des tests pour chaque nouvelle fonctionnalité
-
-Rédiger des commits clairs et concis
+- Respecter les [conventions PSR-12](https://www.php-fig.org/psr/psr-12/)
+- Code sans erreur avec PhpStan (niveau 6 minimum)
+- Ajouter des tests pour chaque nouvelle fonctionnalité
+- Rédiger des commits clairs et concis
 
 ### 🌱 Branches Git
 
@@ -64,13 +61,19 @@ Créez une branche nommée de manière explicite. Exemple :
 
 ```bash
 git checkout -b fix/photo-upload-validation
+git checkout -b feature/photo-upload-validation
 ```
 
-Une fois prêt :
+Lorsque vos modifications sont prêtes à être proposées :
 
-- Poussez votre branche
-- Ouvrez une Pull Request (PR) bien décrite
-- Un relecteur validera avant merge
+- Poussez votre branche sur le dépôt distant
+- Créez une Pull Request (PR) claire et complète :
+    - Donnez un titre explicite résumant l’objectif de la PR
+    - Rédigez une description détaillée :
+        - Expliquez ce que fait la PR
+        - Précisez pourquoi ces changements sont nécessaires
+        - Ajoutez, si besoin, des captures d’écran, des liens vers des tickets ou des étapes de test
+- Un relecteur examinera et validera la PR avant qu’elle soit fusionnée
 
 🧪 Tests
 
