@@ -95,5 +95,5 @@ vendor/bin/phpstan analyse src tests
 php bin/phpunit --coverage-html var/coverage
 ```
 
-Le détail de la couverture du code sera disponible dans [var/coverage/index.html](var/coverage/index.html).  
+Le détail de la couverture du code sera disponible dans le répertoire `var/coverage/index.html` du projet.  
 L'objectif minimum de couverture est de 70%.

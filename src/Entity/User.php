@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\NotCompromisedPassword]
-    #[Assert\Length(min: 8)]
+    #[Assert\Length(min: 12)]
     private string $password;
 
     #[ORM\Column]
